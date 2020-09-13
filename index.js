@@ -6,8 +6,6 @@ const personas2 = require("./files/personas.js");
 const datos   =require("./files/personas.json");
 const operaciones = require("./modulos/operaciones.js");
 const { suma } = require("./modulos/operaciones.js");
-
-
 console.log(datos);
 
 datos.map(persona=>console.log(`El bmi de ${persona.name} es: ${bmi(persona.weigth,persona.heigth)}`))
@@ -21,17 +19,24 @@ archivo.once("open",(f)=>{
     datos.map(persona=>archivo.write(`\n El bmi de ${persona.name} es: ${bmi(persona.weigth,persona.heigth)} `));
 
 });
+let numRegistros=0;
 
-fs.readFile("./files/oscar_age_female.csv","utf8",(err,data)=>{
+const promedio =  fs.readFile("./files/oscar_age_female.csv","utf8",(err,data)=>{
     if (err)
        return console.log(err.message)
     //console.log(data);
     const lineas =data.split("\n");
+    let  sumEdad=0;  
     lineas.map(linea =>{
         const columnas = linea.split(",");
-        console.log(columnas[3]);
+      if (columnas[2] != undefined && !isNaN(columnas[2]) ){
+          sumEdad = sumEdad + Number(columnas[2]);
+          numRegistros++;
+        }
     });
-
-    
+    console.log(`Suma Edad: ${sumEdad}`);
+    console.log(`Promedio : ${sumEdad/numRegistros}`);
+   return sumEdad;
+   
 });
-
+console.log(`Promedio : ${promedio}`);
